@@ -1,0 +1,9 @@
+_target_: stapler.loss.LossFactory
+losses:
+  - mlm_loss:
+      _target_: stapler.loss.MLMLoss
+      weight: 0.42
+      pad_token_id: 0
+  - cls_loss:
+      _target_: stapler.loss.CLSLoss
+      weight: 0.58

@@ -1,0 +1,18 @@
+_target_: stapler.models.stapler_transformer.STAPLERTransformer
+
+num_tokens: 25 # num_tokens
+cls_dropout: 0.05 # not used in pre-train, all dropout 0.05 for full seq in fine-tuning
+checkpoint_path: ${oc.env:BEST_PRETRAIN_CHECKPOINT_PATH}
+output_classification: True
+emb_dim: 25 # emb_dim, kwargs for TransformerWrapper
+emb_dropout: 0.05 # all dropout 0.05 for full seq in fine-tuning, kwargs for TransformerWrapper
+# use_abs_pos_emb: True
+attn_layers:
+  _target_: x_transformers.x_transformers.Encoder
+  dim: 512
+  depth: 8
+  heads: 8
+  ff_glu: True
+  rel_pos_bias: True
+  attn_dropout: 0.05 # all dropout 0.05 for full seq in fine-tuning
+  ff_dropout: 0.05 # all dropout 0.05 for full seq in fine-tuning

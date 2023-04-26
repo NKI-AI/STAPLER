@@ -1,0 +1,15 @@
+_target_: stapler.lit_modules.lit_module_train.STAPLERLitModule
+
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 0.005
+  eps: 1e-6
+  betas: [0.9, 0.999]
+  weight_decay: 0.01
+  _partial_: True
+
+scheduler:
+  _target_: stapler.utils.model_utils.CosineWarmupScheduler
+  _partial_: True
+  warmup: 10
+  max_iters: 150

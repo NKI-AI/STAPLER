@@ -1,0 +1,12 @@
+_target_: pytorch_lightning.Trainer
+
+accelerator: gpu
+devices: 1
+max_epochs: 150
+check_val_every_n_epoch: 1
+
+# number of validation steps to execute at the beginning of the training
+#num_sanity_val_steps: 1
+
+#resume_from_checkpoint: ${oc.env:BEST_CHECKPOINT_PATH} # TODO: implement resume training from checkpoint, (either pretrain or train?)
+log_every_n_steps: 1

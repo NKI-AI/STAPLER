@@ -1,0 +1,7 @@
+_target_: stapler.transforms.transforms.TransformFactory
+transforms:
+  -   _target_: stapler.transforms.masking.Masking
+      mask_prob: 0.15
+#      mask_ignore_token_ids: null
+      replace_prob: 1.
+      _partial_: True

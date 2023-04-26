@@ -1,0 +1,13 @@
+_target_: stapler.datamodule.train_datamodule.TrainDataModule
+train_data_path: ${oc.env:TRAIN_DATA_PATH}
+test_data_path: ${oc.env:TEST_DATA_PATH}
+tokenizer:
+  _target_: stapler.datamodule.components.tokenizers.BasicTokenizer
+  vocabulary: "ARNDCEQGHILKMFPSTWYV"
+  add_special_tokens: True
+transform: null
+padder:
+  _target_: stapler.transforms.transforms.PadSequence
+  _partial_: True
+weighted_class_sampling: True
+weighted_epitope_sampling: True

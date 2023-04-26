@@ -1,0 +1,6 @@
+# @package _global_
+
+datamodule:
+  batch_size: 256
+  num_workers: 7
+  pin_memory: True

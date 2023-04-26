@@ -1,0 +1,13 @@
+# path to root directory
+root_dir: ${oc.env:PROJECT_ROOT} # specify in .env -- this will be the folder in which /logs and other stuff is dropped
+
+# path to logging directory (here is where hydra will create all of its subdirectories -- only internal usage)
+log_dir: ${paths.root_dir}/logs
+
+# path to output directory, created dynamically by hydra
+# path generation pattern is specified in `configs/hydra/default.yaml`
+# use it to store all files generated during the run, like ckpts and metrics etc.
+output_dir: ${hydra:runtime.output_dir}
+
+# path to working directory
+work_dir: ${hydra:runtime.cwd}

@@ -1,0 +1,11 @@
+_target_: stapler.datamodule.pretrain_datamodule.PretrainDataModuleTcrEpitope
+tcrs_path: ${oc.env:TCR_DATA_PATH}
+epitopes_path: ${oc.env:EPITOPES_DATA_PATH}
+tokenizer:
+  _target_: stapler.datamodule.components.tokenizers.BasicTokenizer
+  vocabulary: "ARNDCEQGHILKMFPSTWYV"
+  add_special_tokens: True
+transform: null
+padder:
+  _target_: stapler.transforms.transforms.PadSequence
+  _partial_: True

@@ -1,0 +1,62 @@
+# @package _global_
+
+# specify here default training configuration
+defaults:
+  - _self_  # Means that any variables defined here will be overridden by possible subconfigs below
+  - datamodule: train_dataset.yaml
+  - callbacks:
+      - train_model_checkpoint.yaml
+      - lr_monitor.yaml
+      - rich_progress_bar.yaml
+      - model_summary.yaml
+  - model: train_medium_model.yaml
+  - transforms: mlm.yaml
+  - lit_module: train_lit_module.yaml
+  - loss: train_mlm_cls.yaml
+  - logger: tensorboard.yaml # set logger here or use command line (e.g. `python train.py logger=tensorboard`)
+  - trainer: train.yaml
+  - hydra: default.yaml  # if we want to setup different hydra logging dirs / color log
+  - paths: default.yaml
+  - machine_settings: train_a100.yaml
+
+  # experiment configs allow for version control of specific configurations
+  # e.g. specific hyperparameter searches or something
+  - experiment: null
+
+  # debugging config (enable through command line, e.g. `python train.py debug=default)
+  - debug: null
+
+  # config for hyperparameter optimization
+  - hparams_search: null
+
+  # optional local config for user specific settings
+  # it's optional since it doesn't need to exist and is excluded from version control
+  - optional local: default.yaml
+
+# task name -- used for output directory path (or name it to a specific experiment if you'd like)
+task_name: "train_5_fold"
+
+# tags that can be found in mlflow to keep track of experiments
+# note you cannot append in cli currently (perhaps in future)
+tags: ["dev"]
+
+# pretty print config at the start of the run using Rich library
+print_config: True
+
+# disable python warnings if they annoy you
+ignore_warnings: False
+
+# force tags to be entered (e.g. for running experiments):
+enforce_tags: False
+
+# set False to skip model training
+train: True
+
+# evaluate on test set, using best model weights achieved during training or a specific checkpoint
+# if test after training lightning chooses best weights based on the metric specified in checkpoint callback
+test_after_training: True
+test_from_ckpt: False
+test_from_ckpt_path: null
+
+# seed for random number generators in pytorch, numpy and python.random
+seed: 42
