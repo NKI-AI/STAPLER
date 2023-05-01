@@ -12,7 +12,7 @@
     
 
   <p align="center">
-    <a href="https://www.biorxiv.org" onclick="window.open('#','_blank');window.open(this.href,'_self');"> Preprint (bioArxiv) </a>
+    <a href="https://www.biorxiv.org/content/10.1101/2023.04.25.538237v1" onclick="window.open('#','_blank');window.open(this.href,'_self');"> Preprint (bioArxiv) </a>
     .
     <a href="https://github.com/NKI-AI/STAPLER/issues" onclick="window.open('#','_blank');window.open(this.href,'_self');">Report Bug</a>
   </p>
@@ -43,11 +43,14 @@
 ## Usage
 
 ### Pre-training, fine-tuning and testing of STAPLER
-Inside the `tools` folder, you can find the following files to pre-train, fine-tune and/or test STAPLER (currently only supports the STAPLER (medium sized) model). 
+
+Inside the `tools` directory you should change the following file:
 * `.env`: Environment file with paths to data, output paths and model checkpoints. You should adapt the `.env.example` to your local file-system and then change the file-name to `.env`.
-* `sbatch pretrain_STAPLER.sh`: Pre-train STAPLER on a SLURM cluster. Provide `--partition` to specify the partition to use.
-* `sbatch train_STAPLER.sh`: Fine-tune STAPLER using 5-fold cross-validation on a SLURM cluster. Provide `--partition` to specify the partition to use.
-* `sbatch test_STAPLER.sh`: Test on a test set using a fine-tuned model checkpoint. Provide `--partition` to specify the partition to use.
+
+Here you can also find the following files to pre-train, fine-tune and/or test STAPLER on a SLURM cluster (currently only supports the STAPLER (medium sized) model). Also provide an argument to `--partition` to specify the partition to use.
+* `sbatch pretrain_STAPLER.sh`: Pre-train STAPLER.
+* `sbatch train_STAPLER.sh`: Fine-tune STAPLER using 5-fold cross-validation.
+* `sbatch test_STAPLER.sh`: Test on a test set using a fine-tuned model checkpoint. 
 
 
 ### Custom parameters
@@ -71,14 +74,14 @@ Ai for Oncology group (NKI) - <a href="https://www.aiforoncology.nl" target="_bl
 
 ## Acknowledgments
 
-The development of the STAPLER model is the result of a collaboration between the Schumacher lab AIforOncology lab at The Netherlands Cancer Institute. The following people contributed to the development of the model:
+The development of the STAPLER model is the result of a collaboration between the Schumacher lab AIforOncology lab at the Netherlands Cancer Institute. The following people contributed to the development of the model:
 * Bjørn Kwee (implementation, development, evaluation, refactoring)
 * Marius Messemaker (supervision, development, evaluation)
 * Eric Marcus (supervision, refactoring)
 * Jonas Teuwen (supervision)
 * Ton Schumacher (supervision)
 
-Data was provided and results were interpreted by the following people from the <a href="https://wulab.dfci.harvard.edu" target="_blank">Wu lab</a>  (DFCI and Harvard Medical School): 
+A part of the data was provided- and consequent results were interpreted by the following people from the <a href="https://wulab.dfci.harvard.edu" target="_blank">Wu lab</a>  (DFCI and Harvard Medical School): 
 * Giacomo Oliveira
 * Catherine Wu
 
