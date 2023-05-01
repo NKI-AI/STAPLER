@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # SLURM SUBMIT SCRIPT
-# run with : sbatch -p a6000 run_cdr3-med-vj.sh
 
 #SBATCH --nodes=1
 #SBATCH --ntasks=1

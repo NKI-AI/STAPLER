@@ -55,11 +55,7 @@ class STAPLERTransformer(TransformerWrapper):
         Returns:
             output_dict (dict): Dictionary containing logits for token-level and sequence-level classification tasks.
         """
-        # TODO: add support for return_hiddens here (Eric)
-        #  return_embeddings is used in the TransformerWrapper to return x (bjorn)
-        #  if return_embeddings is False it returns logits (bjorn)
-        #  other option is to use return_attn for attn weights of the last layer (bjorn)
-        #  At some point we would want to look at the attention scores, so this is to be done at some point (bjorn)
+
         x = super().forward(x, **kwargs)
         output_dict = {}
         logits = self.to_logits(x)

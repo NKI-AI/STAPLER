@@ -64,26 +64,3 @@ class Masking(Transform):
 
         return input_dict
 
-
-#
-# class Masking2(Transform):
-#     def __init__(self, mask_token_id: int, pad_token_id: int, mask_prob: float = 0.15, **kwargs):
-#         super().__init__(**kwargs)
-#         self.mask_token_id = mask_token_id
-#         self.pad_token_id = pad_token_id
-#         self.mask_prob = mask_prob
-#
-#     def __call__(self, x: torch.Tensor):
-#         """Mask the input data.
-#
-#         Args:
-#             x (torch.Tensor): The input data, consisting of batches of tokenized sequences.
-#
-#         Returns:
-#             torch.Tensor: The masked input data.
-#         """
-#         x = x.clone()
-#         mask = torch.rand(x.shape) < self.mask_prob
-#         mask &= x != self.pad_token_id
-#         x[mask] = self.mask_token_id
-#         return x

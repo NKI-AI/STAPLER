@@ -37,7 +37,7 @@ def stapler_entrypoint(config: DictConfig, fold: Optional[int] = None) -> Option
         else:
             datamodule: LightningDataModule = hydra.utils.instantiate(config.datamodule)
         datamodule.setup()
-        max_seq_len = datamodule.train_dataset.max_seq_len  # TODO: Can we do this better? And same for vocab size?
+        max_seq_len = datamodule.train_dataset.max_seq_len
     else:
         raise NotImplementedError(f"No datamodule target found in <{config.datamodule}>")
 
