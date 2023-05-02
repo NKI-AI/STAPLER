@@ -2,14 +2,14 @@ from sklearn.metrics import average_precision_score
 import json
 import pandas as pd
 
-df_test = pd.read_csv('../data/external_test_sets/parsed/vdjdb_external_negatives_data.csv')
-df_train = pd.read_csv('../data/saved_data/2022-05-20_train-set_full-seq_no-naives_same-mispair-ratio.csv')
+df_test = pd.read_csv('vdjdb_external_negatives_data.csv')
+df_train = pd.read_csv('2022-05-20_train-set_full-seq.csv')
 train_epitopes = df_train['epitope_aa'].unique().tolist()
 
 results_fold_dict = {}
 pred_cls_mean = [0] * len(df_test)
 for i in range(5):
-    with open(f'/logs/train_5_fold/version_{i}/test_results{i}.json') as f:
+    with open(f'/tensorboard/version_{i}/test_results{i}.json') as f:
         data = json.load(f)
         pred_cls = []
         label_cls = []

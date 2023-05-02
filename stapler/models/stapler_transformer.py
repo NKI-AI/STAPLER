@@ -73,7 +73,16 @@ class STAPLERTransformer(TransformerWrapper):
         checkpoint = torch.load(checkpoint_path, map_location=device)
         state_dict = checkpoint["state_dict"]
 
-        # Remove "model." prefix from state dict keys
-        state_dict = {k.replace("model.", ""): v for k, v in state_dict.items()}
+        # Remove "model." or "transformer." prefix from state dict keys and remove any keys containing 'to_cls'
+        try:
+            state_dict = {
+                key.replace("model.", "").replace("transformer.", ""): value
+                for key, value in state_dict.items()
+                if "to_cls" not in key
+            }
+        except Exception as e:
+            print("Error loading state dict. Please check the checkpoint file.")
+            raise e
+
 
         self.load_state_dict(state_dict)

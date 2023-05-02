@@ -1,4 +1,6 @@
 """Here we want to place any Input/Output utilities"""
+import os
+import json
 import logging
 import warnings
 from typing import Any, Sequence
@@ -166,3 +168,12 @@ def extras(config: DictConfig) -> None:
             config.datamodule.pin_memory = False
         if config.datamodule.get("num_workers"):
             config.datamodule.num_workers = 0
+
+def save_output(output, path, append):
+    logger = get_pylogger(__name__)
+    logger.info("Saving test results to json at {}".format(path))
+    json_path = os.path.join(path, f"test_results{append}.json")
+    with open(json_path, "w") as f:
+        json.dump(output, f)
+    logger.info(f"Test results saved to {json_path}")
+

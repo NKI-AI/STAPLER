@@ -10,7 +10,7 @@ from pytorch_lightning import Callback, LightningDataModule, LightningModule, Tr
 from pytorch_lightning.loggers import LightningLoggerBase
 from torch.utils.data import DataLoader, Dataset
 
-from stapler.utils.io_utils import get_pylogger, log_hyperparameters
+from stapler.utils.io_utils import get_pylogger, log_hyperparameters, save_output
 
 logger = get_pylogger(__name__)
 
@@ -126,22 +126,20 @@ def stapler_entrypoint(config: DictConfig, fold: Optional[int] = None) -> Option
     score = trainer.callback_metrics.get(optimized_metric)
 
     # Test the model
-    if config.get("test_after_training") or config.get("test_from_ckpt"):
-        if config.get("train"):
-            ckpt_path = "best"
-        elif config.get("test_from_ckpt"):
-            ckpt_path = config.test_from_ckpt_path
-        else:
-            ckpt_path = None
-
+    if config.get("test_after_training"):
+        ckpt_path = "best" if config.get("train") else None
         logger.info("Starting testing!")
         output = trainer.predict(model=model, datamodule=datamodule, ckpt_path=ckpt_path, return_predictions=True)
-        # save to json
-        logger.info("Saving test results to json at {}".format(trainer.logger.log_dir))
-        json_path = os.path.join(trainer.logger.log_dir, f"test_results{fold}.json")
-        with open(json_path, "w") as f:
-            json.dump(output, f)
-        logger.info(f"Test results saved to {json_path}")
+        save_output(output=output, path=trainer.logger.log_dir, append=str(fold))
+
+    elif config.get("test_from_ckpt"):
+        logger.info("Starting testing!")
+        ckpt_names = [file_name for file_name in os.listdir(config.test_from_ckpt_path) if file_name.endswith(".ckpt")]
+        assert len(ckpt_names) == 5, "There should be 5 model checkpoints in config.test_from_ckpt_path"
+        for i, ckpt_name in enumerate(ckpt_names):
+            checkpoint = os.path.join(config.test_from_ckpt_path, ckpt_name)
+            output = trainer.predict(model=model, datamodule=datamodule, ckpt_path=checkpoint, return_predictions=True)
+            save_output(output=output, path=trainer.logger.log_dir, append=str(i))
 
     # Make sure everything closed properly
     logger.info("Finalizing!")
