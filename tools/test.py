@@ -1,7 +1,7 @@
 import dotenv
 import hydra
-import mlflow
 from omegaconf import DictConfig
+from stapler.utils.io_utils import ensemble_5_fold_output
 
 # load environment variables from `.env` file if it exists
 # recursively searches for `.env` in all folders starting from work dir
@@ -29,6 +29,7 @@ def main(config: DictConfig):
         print_config(config, resolve=True)
 
     stapler_entrypoint(config)
+    ensemble_5_fold_output(output_path=config.output_dir,  test_dataset_path=config.datamodule.test_data_path)
 
 
 if __name__ == "__main__":

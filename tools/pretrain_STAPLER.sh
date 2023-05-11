@@ -4,7 +4,7 @@
 
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --time=1-00:00:00
+#SBATCH --time=3-00:00:00
 #SBATCH --partition=???
 #SBATCH --gpus=1
 #SBATCH --cpus-per-task=8
@@ -23,7 +23,7 @@ echo 'current time' $(date)
 
 MLFLOW_PORT=5000
 mlflow server --backend-store-uri ../logs/mlflow/mlruns --host 0.0.0.0:$MLFLOW_PORT &
-HYDRA_FULL_ERROR=1 python pretrain.py machine_settings="pretrain_a100.yaml" task_name=$EXPERIMENT_NAME
+HYDRA_FULL_ERROR=1 python pretrain.py task_name=$EXPERIMENT_NAME
 
 echo 'current time' $(date)
 echo 'Finished'

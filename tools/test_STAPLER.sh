@@ -22,7 +22,7 @@ echo 'Start script:'
 echo 'current time' $(date)
 
 
-HYDRA_FULL_ERROR=1 python test.py logger=tensorboard task_name=$EXPERIMENT_NAME
+HYDRA_FULL_ERROR=1 python test.py task_name=$EXPERIMENT_NAME
 
 echo 'current time' $(date)
 echo 'Finished'

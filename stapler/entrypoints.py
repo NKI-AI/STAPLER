@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import os
 from typing import Any, List, Optional
 
@@ -130,16 +129,17 @@ def stapler_entrypoint(config: DictConfig, fold: Optional[int] = None) -> Option
         ckpt_path = "best" if config.get("train") else None
         logger.info("Starting testing!")
         output = trainer.predict(model=model, datamodule=datamodule, ckpt_path=ckpt_path, return_predictions=True)
-        save_output(output=output, path=trainer.logger.log_dir, append=str(fold))
+        save_output(output=output, path=config.output_dir, append=str(fold))
 
     elif config.get("test_from_ckpt"):
         logger.info("Starting testing!")
         ckpt_names = [file_name for file_name in os.listdir(config.test_from_ckpt_path) if file_name.endswith(".ckpt")]
-        assert len(ckpt_names) == 5, "There should be 5 model checkpoints in config.test_from_ckpt_path"
+        if len(ckpt_names) != 5:
+            raise Exception("There should be 5 checkpoints in the `config.test_from_ckpt_path` directory.")
         for i, ckpt_name in enumerate(ckpt_names):
             checkpoint = os.path.join(config.test_from_ckpt_path, ckpt_name)
             output = trainer.predict(model=model, datamodule=datamodule, ckpt_path=checkpoint, return_predictions=True)
-            save_output(output=output, path=trainer.logger.log_dir, append=str(i))
+            save_output(output=output, path=config.output_dir, append=str(i))
 
     # Make sure everything closed properly
     logger.info("Finalizing!")

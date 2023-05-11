@@ -24,13 +24,15 @@ install_requires = [
     "hydra-optuna-sweeper==1.2.0",
     "hydra-colorlog==1.2.0",
     "matplotlib>=3.5.3",
+    "seaborn>=0.11.2",
+    "pandas>=1.4.1",
     "scikit-learn>=1.1.2",
 ]
 
 # X-transformers has an 'entmax' package which is broken -- requires torch for install, which will not be installed yet
 # fails on tox
-if os.environ.get("IS_TOX", False):
-    install_requires.append("x-transformers==1.0.3")
+if not os.environ.get("IS_TOX", True):
+    install_requires.append("x-transformers==0.22.3")
 
 
 setup(
@@ -43,7 +45,7 @@ setup(
         "Natural Language :: English",
         "Programming Language :: Python :: 3",
     ],
-    description="TCR specificity",
+    description="STAPLER",
     install_requires=install_requires,
     extras_require={
         "dev": ["pytest", "numpydoc", "pylint", "black==22.3.0"],
@@ -52,7 +54,7 @@ setup(
     include_package_data=True,
     name="stapler",
     test_suite="tests",
-    url="https://github.com/NKI-AI/TCR-Specificity",
+    url="https://github.com/NKI-AI/STAPLER",
     py_modules=["stapler"]
     # version=version,
     # zip_safe=False,

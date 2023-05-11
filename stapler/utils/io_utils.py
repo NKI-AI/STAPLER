@@ -3,8 +3,8 @@ import os
 import json
 import logging
 import warnings
+import pandas as pd
 from typing import Any, Sequence
-
 import pytorch_lightning as pl
 import rich
 import rich.syntax
@@ -30,9 +30,9 @@ def get_pylogger(name=__name__) -> logging.Logger:
 
 @rank_zero_only
 def log_hyperparameters(
-    config: DictConfig,
-    model: pl.LightningModule,
-    trainer: pl.Trainer,
+        config: DictConfig,
+        model: pl.LightningModule,
+        trainer: pl.Trainer,
 ) -> None:
     """Controls which config parts are saved by Lightning loggers.
     Additionaly saves:
@@ -70,7 +70,7 @@ def debug_function(x: float):
     :param x:
     :return: x^2
     """
-    return x**2
+    return x ** 2
 
 
 def validate_config(cfg: Any):
@@ -91,19 +91,19 @@ def validate_config(cfg: Any):
 
 @rank_zero_only
 def print_config(
-    config: DictConfig,
-    fields: Sequence[str] = (
-        "trainer",
-        "model",
-        "experiment",
-        "datamodule",
-        "callbacks",
-        "logger",
-        "test_after_training",
-        "seed",
-        "name",
-    ),
-    resolve: bool = True,
+        config: DictConfig,
+        fields: Sequence[str] = (
+                "trainer",
+                "model",
+                "experiment",
+                "datamodule",
+                "callbacks",
+                "logger",
+                "test_after_training",
+                "seed",
+                "name",
+        ),
+        resolve: bool = True,
 ) -> None:
     """Prints content of DictConfig using Rich library and its tree structure.
     Args:
@@ -169,6 +169,7 @@ def extras(config: DictConfig) -> None:
         if config.datamodule.get("num_workers"):
             config.datamodule.num_workers = 0
 
+
 def save_output(output, path, append):
     logger = get_pylogger(__name__)
     logger.info("Saving test results to json at {}".format(path))
@@ -177,3 +178,27 @@ def save_output(output, path, append):
         json.dump(output, f)
     logger.info(f"Test results saved to {json_path}")
 
+
+def ensemble_5_fold_output(output_path, test_dataset_path):
+    logger = get_pylogger(__name__)
+    logger.info("Checking 5-fold test results from {}".format(output_path))
+    df_test = pd.read_csv(test_dataset_path)
+
+    pred_cls_mean = [0] * len(df_test)
+    for i in range(5):
+        with open(os.path.join(output_path, f'test_results{i}.json')) as f:
+            data = json.load(f)
+            pred_cls = []
+            label_cls = []
+            for batch in data:
+                pred_cls.append(batch['preds_cls'])
+                label_cls.append(batch['labels_cls'])
+            pred_cls = [item for sublist in pred_cls for item in sublist]
+            label_cls = [item for sublist in label_cls for item in sublist]
+            if df_test['label_true_pair'].tolist() != label_cls:
+                raise ValueError('Labels from the test dataset are not same as the labels in the model output')
+            pred_cls_mean = [x + y / 5 for x, y in zip(pred_cls_mean, pred_cls)]
+
+    df_test['pred_cls'] = pred_cls_mean
+    df_test.to_csv(os.path.join(output_path, f'predictions_5_fold_ensamble.csv'))
+    logger.info(f"Ensembled test results saved to {output_path}")
