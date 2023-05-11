@@ -33,55 +33,76 @@
     ```sh
     cd STAPLER
     ```
-3. Install the `STAPLER` package
+3. Install the `STAPLER` package (should take less than 10 minutes)
    ```sh
     python -m pip install .
    ```
+   
 ### Data and model checkpoints
 
 The following data is available <a href="https://files.aiforoncology.nl/stapler/" target="_blank">here</a>:
-* TCR and peptide datasets used to pre-train STAPLER.
-* 5 train and validation folds containing labeled TCR-peptide pairs used to fine-tune STAPLER.
-* 1 pre-trained model checkpoint.
-* 5 fine-tuned model checkpoints (one for each fold).
-* VDJDB+ETN test dataset used to test STAPLER.
+
+* data/train:
+    * TCR and peptide datasets used to pre-train STAPLER
+    * The training dataset
+    * 5 train and validation folds created from the training dataset used to fine-tune STAPLER
+* data/test:
+  * VDJDB+ and VDJDB+ETN test datasets used to test STAPLER
+* model/pretrained_model:
+    * 1 pre-trained model checkpoint
+* model/finetuned_model:
+  * 5 fine-tuned model checkpoints (one for each fold).
+* predictions:
+  * 5 predictions for each fold on the VDJDB+ETN test set
+  * 1 ensembled prediction of all 5-fold predictions on the VDJDB+ETN test set
+
 
 ### Requirements
-STAPLER was pre-trained and fine-tuned using an a100 GPU on a SLURM cluster. 
-Pre-trained and fine-tuned versions of smaller model sizes will be added in the future, which will fit on smaller GPUs.
+STAPLER was pre-trained and fine-tuned using an a100 GPU. At this moment no other GPU's have been tested.
+
+### Setup
+
+Inside the `tools` directory the following file should be changed:
+* `.env.example`: Which is an environment file with paths to data, model checkpoints and output paths. It should be adapt the `.env.example` to your local file-system and then change the file-name to `.env`. For more information see <a href="https://github.com/theskumar/python-dotenv" target="_blank">python-dotenv</a>.
+
+
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
 ### Pre-training, fine-tuning and testing of STAPLER
 
-Inside the `tools` directory you should change the following file:
-* `.env.example`: Environment file with paths to data, model checkpoints and output paths. You should adapt the `.env.example` to your local file-system and then change the file-name to `.env`. For more information see <a href="https://github.com/theskumar/python-dotenv" target="_blank">python-dotenv</a>.
-
-Here you can also find the following files to pre-train, fine-tune and/or test STAPLER on a <a href="https://slurm.schedmd.com" target="_blank">SLURM</a> cluster.  Also provide an argument to `--partition` to specify the partition to use. 
+Inside the `tools` directory contains the following files to pre-train, fine-tune and/or test STAPLER on a <a href="https://slurm.schedmd.com" target="_blank">SLURM</a> cluster.  Also provide an argument to `--partition` to specify the partition to use. 
 * `sbatch pretrain_STAPLER.sh`: Pre-train STAPLER.
 * `sbatch train_STAPLER.sh`: Fine-tune STAPLER using 5-fold cross-validation.
 * `sbatch test_STAPLER.sh`: Test on a test set using a fine-tuned model checkpoint. 
 
+Alternatively run STAPLER directly on a machine with an appropriate GPU (see requirements).
+* `python pretrain.py`: Pre-train STAPLER.
+* `python train_5_fold.py`: Fine-tune STAPLER using 5-fold cross-validation.
+* `python test.py`: Test on a test set using a fine-tuned model checkpoint.
+
+### Required GPU time
+The pre-training should take a day, fine-tuning should take a couple of hours per fold and testing/inference should take a couple of minutes for all 5-fold predictions.
 
 ### Custom parameters
-If you want to experiment with alternative parameters, 
-you can do so in the `config` directory (implemented using <a href="https://hydra.cc/docs/intro/" target="_blank">Hydra</a>). 
+To experiment with custom model parameters 
+change the paramteres inside the `config` directory (implemented using <a href="https://hydra.cc/docs/intro/" target="_blank">Hydra</a>). 
 The `config` directory contains the following main configuration files:
 * `pretrain.yaml`: Configuration parameters file for pre-training.
 * `train_5_fold.yaml`: Configuration parameters file for fine-tuning.
 * `test.yaml`: Configuration parameters file for testing.
 
 
-### TO-DO's
-
-- [ ] Add support for other model sizes (pre-trained and fine-tuned model checkpoints).
-
-## Issues
+## Issues and feature requests
 To request a feature or to discuss any issues, please let us know by opening an issue on the <a href="https://github.com/NKI-AI/STAPLER/issues" target="_blank">issues page</a>.
+
+- [ ] The notebooks used to make the pre-print figures will be available soon
 
 <!-- CONTACT -->
 ## Contact
+
+Corresponding author: <a href="https://www.nki.nl/research/find-a-researcher/groupleaders/ton-schumacher/" target="_blank">Ton Schumacher</a>
 
 Ton Schumacher group (NKI) - <a href="https://www.nki.nl/research/research-groups/ton-schumacher/" target="_blank">Group website</a> - [![Twitter][twitter-shield_lab]][twitter-url_lab]
 
