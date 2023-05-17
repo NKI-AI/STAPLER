@@ -13,6 +13,9 @@ dotenv.load_dotenv(override=True)
     version_base="1.2",
 )
 def main(config: DictConfig):
+    # needed to import stapler
+    import sys
+    sys.path.append('../')
 
     # Imports can be nested inside @hydra.main to optimize tab completion
     # https://github.com/facebookresearch/hydra/issues/934

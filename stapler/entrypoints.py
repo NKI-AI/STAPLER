@@ -129,7 +129,7 @@ def stapler_entrypoint(config: DictConfig, fold: Optional[int] = None) -> Option
         ckpt_path = "best" if config.get("train") else None
         logger.info("Starting testing!")
         output = trainer.predict(model=model, datamodule=datamodule, ckpt_path=ckpt_path, return_predictions=True)
-        save_output(output=output, path=config.output_dir, append=str(fold))
+        save_output(output=output, path=config.paths.output_dir, append=str(fold))
 
     elif config.get("test_from_ckpt"):
         logger.info("Starting testing!")
@@ -139,7 +139,7 @@ def stapler_entrypoint(config: DictConfig, fold: Optional[int] = None) -> Option
         for i, ckpt_name in enumerate(ckpt_names):
             checkpoint = os.path.join(config.test_from_ckpt_path, ckpt_name)
             output = trainer.predict(model=model, datamodule=datamodule, ckpt_path=checkpoint, return_predictions=True)
-            save_output(output=output, path=config.output_dir, append=str(i))
+            save_output(output=output, path=config.paths.output_dir, append=str(i))
 
     # Make sure everything closed properly
     logger.info("Finalizing!")

@@ -1,7 +1,7 @@
 import dotenv
 import hydra
 from omegaconf import DictConfig
-from stapler.utils.io_utils import ensemble_5_fold_output
+
 
 # load environment variables from `.env` file if it exists
 # recursively searches for `.env` in all folders starting from work dir
@@ -13,11 +13,14 @@ dotenv.load_dotenv(override=True)
     version_base="1.2",
 )
 def main(config: DictConfig):
+    # needed to import stapler
+    import sys
+    sys.path.append('../')
 
     # Imports can be nested inside @hydra.main to optimize tab completion
     # https://github.com/facebookresearch/hydra/issues/934
     from stapler.entrypoints import stapler_entrypoint
-    from stapler.utils.io_utils import extras, print_config, validate_config
+    from stapler.utils.io_utils import extras, print_config, validate_config, ensemble_5_fold_output
 
     # Validate config -- Fails if there are mandatory missing values
     validate_config(config)
@@ -29,7 +32,7 @@ def main(config: DictConfig):
         print_config(config, resolve=True)
 
     stapler_entrypoint(config)
-    ensemble_5_fold_output(output_path=config.output_dir,  test_dataset_path=config.datamodule.test_data_path)
+    ensemble_5_fold_output(output_path=config.paths.output_dir,  test_dataset_path=config.datamodule.test_data_path)
 
 
 if __name__ == "__main__":
