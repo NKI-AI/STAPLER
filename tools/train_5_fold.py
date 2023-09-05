@@ -9,7 +9,7 @@ dotenv.load_dotenv(override=True)
 @hydra.main(
     config_path="../config",
     config_name="train_5_fold.yaml",
-    version_base="1.2",
+    version_base="1.3",
 )
 def main(config: DictConfig):
     # needed to import stapler

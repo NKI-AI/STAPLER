@@ -6,7 +6,6 @@ from typing import Any, List, Optional
 import hydra
 from omegaconf import DictConfig
 from pytorch_lightning import Callback, LightningDataModule, LightningModule, Trainer, seed_everything
-from pytorch_lightning.loggers import LightningLoggerBase
 from torch.utils.data import DataLoader, Dataset
 
 from stapler.utils.io_utils import get_pylogger, log_hyperparameters, save_output
@@ -90,7 +89,7 @@ def stapler_entrypoint(config: DictConfig, fold: Optional[int] = None) -> Option
                 callbacks.append(hydra.utils.instantiate(cb_conf))
 
     # Init lightning loggers
-    lightning_loggers: List[LightningLoggerBase] = []
+    lightning_loggers: List = []
     if "logger" in config:
         for _, lg_conf in config.logger.items():
             if "_target_" in lg_conf:

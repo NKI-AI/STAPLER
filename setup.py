@@ -9,14 +9,14 @@ with open("README.md") as readme_file:
     long_description = readme_file.read()
 
 install_requires = [
-    "numpy==1.23.2",
-    "torch@https://download.pytorch.org/whl/cu116/torch-1.12.1%2Bcu116-cp38-cp38-linux_x86_64.whl",  # Specific version for CUDA 11.6
-    "pytorch-lightning==1.7.3",
-    "torchvision@https://download.pytorch.org/whl/cu116/torchvision-0.13.1%2Bcu116-cp38-cp38-linux_x86_64.whl",  # Specific version for CUDA 11.6'
-    "pydantic==1.9.1",
+    "numpy==1.24.2",
+    "torch==2.0.1", 
+    "pytorch-lightning==2.0.2",
+    "torchvision==0.15.2",
+    "pydantic==1.10.8",
     "tensorboard>=2.9",
     "mlflow>=1.26",
-    "hydra-core==1.2.0",
+    "hydra-core==1.3.0",
     "python-dotenv>=0.20",
     "tqdm==4.64",
     "rich>=12.4",
@@ -27,12 +27,8 @@ install_requires = [
     "seaborn>=0.11.2",
     "pandas>=1.4.1",
     "scikit-learn>=1.1.2",
+    "x-transformers==1.19.0"
 ]
-
-# X-transformers has an 'entmax' package which is broken -- requires torch for install, which will not be installed yet
-# fails on tox
-if not os.environ.get("IS_TOX", True):
-    install_requires.append("x-transformers==0.22.3")
 
 
 setup(

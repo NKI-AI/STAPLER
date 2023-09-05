@@ -41,9 +41,9 @@ class STAPLERLitModule(pl.LightningModule):
         self.val_mlm_acc = Accuracy(task="multiclass", num_classes=25)
 
         # average_precision metric (fine-tuning only)
-        self.train_cls_ap = AveragePrecision(pos_label=1, task="binary")
-        self.val_cls_ap = AveragePrecision(pos_label=1, task="binary")
-        self.test_cls_ap = AveragePrecision(pos_label=1, task="binary")
+        self.train_cls_ap = AveragePrecision(task="binary")
+        self.val_cls_ap = AveragePrecision(task="binary")
+        self.test_cls_ap = AveragePrecision(task="binary")
 
     def forward(self, batch: dict[str, torch.Tensor], stage: str, **kwargs):
 
