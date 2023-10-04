@@ -9,7 +9,7 @@ from torch.utils.data import Dataset
 from stapler.datamodule.components.tokenizers import Tokenizer
 
 
-class TrainDataset(Dataset):
+class STAPLERDataset(Dataset):
     def __init__(
         self,
         train_data_path: Union[str, Path],

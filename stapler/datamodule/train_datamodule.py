@@ -8,7 +8,7 @@ from pytorch_lightning import LightningDataModule
 from torch.utils.data import DataLoader, WeightedRandomSampler
 
 from stapler.datamodule.components.tokenizers import Tokenizer
-from stapler.datamodule.components.train_dataset import TrainDataset
+from stapler.datamodule.components.train_dataset import STAPLERDataset
 from stapler.datamodule.dataloader.general_dataloader import create_dataloader
 
 
@@ -47,14 +47,14 @@ class TrainDataModule(LightningDataModule):
             self.val_data_path_fold = self.train_data_path.parent / f"{self.train_data_path.stem.strip('.csv')}_val-fold{self.fold}.csv"
             self.train_data_path_fold = self.train_data_path.parent / f"{self.train_data_path.stem.strip('.csv')}_train-fold{self.fold}.csv"
 
-            self.val_dataset = TrainDataset(
+            self.val_dataset = STAPLERDataset(
                 self.val_data_path_fold,
                 self.tokenizer,
                 None,
                 self.padder,
             )
 
-            self.train_dataset = TrainDataset(
+            self.train_dataset = STAPLERDataset(
                 self.train_data_path_fold,
                 self.tokenizer,
                 self.transform,
@@ -62,14 +62,14 @@ class TrainDataModule(LightningDataModule):
             )
 
         else:
-            self.train_dataset = TrainDataset(
+            self.train_dataset = STAPLERDataset(
                 self.train_data_path,
                 self.tokenizer,
                 self.transform,
                 self.padder,
             )
 
-        self.test_dataset = TrainDataset(
+        self.test_dataset = STAPLERDataset(
             self.test_data_path,
             self.tokenizer,
             None,

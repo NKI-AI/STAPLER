@@ -6,11 +6,11 @@ import numpy as np
 from collections import Counter
 from torch.utils.data import DataLoader, WeightedRandomSampler
 
-from stapler.datamodule.components.train_dataset import TrainDataset
+from stapler.datamodule.components.train_dataset import STAPLERDataset
 
 
 def create_dataloader(
-    dataset: TrainDataset,
+    dataset: STAPLERDataset,
     batch_size: int = 32,
     num_workers: int = 4,
     pin_memory: bool = True,
