@@ -1,4 +1,17 @@
-"""Here we want to place any Input/Output utilities"""
+# Copyright 2023 Schumacher Lab. All Rights Reserved.
+# Copyright 2023 AI for Oncology Research Group. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 import os
 import json
 import logging
@@ -30,9 +43,9 @@ def get_pylogger(name=__name__) -> logging.Logger:
 
 @rank_zero_only
 def log_hyperparameters(
-        config: DictConfig,
-        model: pl.LightningModule,
-        trainer: pl.Trainer,
+    config: DictConfig,
+    model: pl.LightningModule,
+    trainer: pl.Trainer,
 ) -> None:
     """Controls which config parts are saved by Lightning loggers.
     Additionaly saves:
@@ -70,7 +83,7 @@ def debug_function(x: float):
     :param x:
     :return: x^2
     """
-    return x ** 2
+    return x**2
 
 
 def validate_config(cfg: Any):
@@ -91,19 +104,19 @@ def validate_config(cfg: Any):
 
 @rank_zero_only
 def print_config(
-        config: DictConfig,
-        fields: Sequence[str] = (
-                "trainer",
-                "model",
-                "experiment",
-                "datamodule",
-                "callbacks",
-                "logger",
-                "test_after_training",
-                "seed",
-                "name",
-        ),
-        resolve: bool = True,
+    config: DictConfig,
+    fields: Sequence[str] = (
+        "trainer",
+        "model",
+        "experiment",
+        "datamodule",
+        "callbacks",
+        "logger",
+        "test_after_training",
+        "seed",
+        "name",
+    ),
+    resolve: bool = True,
 ) -> None:
     """Prints content of DictConfig using Rich library and its tree structure.
     Args:
@@ -186,19 +199,19 @@ def ensemble_5_fold_output(output_path, test_dataset_path):
 
     pred_cls_mean = [0] * len(df_test)
     for i in range(5):
-        with open(os.path.join(output_path, f'test_results{i}.json')) as f:
+        with open(os.path.join(output_path, f"test_results{i}.json")) as f:
             data = json.load(f)
             pred_cls = []
             label_cls = []
             for batch in data:
-                pred_cls.append(batch['preds_cls'])
-                label_cls.append(batch['labels_cls'])
+                pred_cls.append(batch["preds_cls"])
+                label_cls.append(batch["labels_cls"])
             pred_cls = [item for sublist in pred_cls for item in sublist]
             label_cls = [item for sublist in label_cls for item in sublist]
-            if df_test['label_true_pair'].tolist() != label_cls:
-                raise ValueError('Labels from the test dataset are not same as the labels in the model output')
+            if df_test["label_true_pair"].tolist() != label_cls:
+                raise ValueError("Labels from the test dataset are not same as the labels in the model output")
             pred_cls_mean = [x + y / 5 for x, y in zip(pred_cls_mean, pred_cls)]
 
-    df_test['pred_cls'] = pred_cls_mean
-    df_test.to_csv(os.path.join(output_path, f'predictions_5_fold_ensamble.csv'))
+    df_test["pred_cls"] = pred_cls_mean
+    df_test.to_csv(os.path.join(output_path, f"predictions_5_fold_ensamble.csv"))
     logger.info(f"Ensembled test results saved to {output_path}")

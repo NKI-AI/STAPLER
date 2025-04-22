@@ -1,0 +1,30 @@
+load("@aspect_rules_py//py:defs.bzl", "py_binary")
+load("@pip//:requirements.bzl", "requirement")
+
+REQUIREMENTS = [
+    "//stapler",
+    requirement("python-dotenv"),
+    requirement("hydra-core"),
+    requirement("hydra-colorlog"),
+]
+
+py_binary(
+    name = "test",
+    srcs = ["test.py"],
+    data = glob(["config/**"]),
+    deps = REQUIREMENTS,
+)
+
+py_binary(
+    name = "train_5_fold",
+    srcs = ["train_5_fold.py"],
+    data = glob(["config/**"]),
+    deps = REQUIREMENTS,
+)
+
+py_binary(
+    name = "pretrain",
+    srcs = ["pretrain.py"],
+    data = glob(["config/**"]),
+    deps = REQUIREMENTS,
+)

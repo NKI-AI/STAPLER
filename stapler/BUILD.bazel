@@ -1,0 +1,31 @@
+load("@aspect_rules_py//py:defs.bzl", "py_library")
+load("@pip//:requirements.bzl", "requirement")
+
+py_library(
+    name = "stapler",
+    srcs = glob([
+        "**/*.py",
+    ]),
+    visibility = ["//visibility:public"],
+    deps = [
+        requirement("torch"),
+        requirement("pytorch-lightning"),
+        requirement("pandas"),
+        requirement("scikit-learn"),
+        requirement("tensorboard"),
+        requirement("mlflow"),
+        requirement("x-transformers"),
+        requirement("python-dotenv"),
+        requirement("hydra-core"),
+        requirement("hydra-colorlog"),
+        requirement("pydantic"),
+        requirement("opentelemetry-sdk"),
+        requirement("requests"),
+        requirement("databricks-sdk"),
+        requirement("sqlparse"),
+        requirement("click"),
+        requirement("pytz"),
+        requirement("python-dateutil"),
+        requirement("rich"),
+    ],
+)
