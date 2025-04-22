@@ -1,3 +1,17 @@
+# Copyright 2023 Schumacher Lab. All Rights Reserved.
+# Copyright 2023 AI for Oncology Research Group. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 from __future__ import annotations
 
 from typing import Any
@@ -7,7 +21,6 @@ import torch
 from torch import nn
 from torch.optim import Optimizer
 
-# import torchmetrics accurcy
 from torchmetrics import Accuracy, AveragePrecision
 
 from stapler.transforms.transforms import Transform
@@ -46,12 +59,10 @@ class STAPLERLitModule(pl.LightningModule):
         self.test_cls_ap = AveragePrecision(task="binary")
 
     def forward(self, batch: dict[str, torch.Tensor], stage: str, **kwargs):
-
         if self.transforms and stage in self.transforms:
             batch = self.transforms[stage](batch)
 
         preds = self.model(batch["input"], return_attn=False, return_embeddings=True, **kwargs)
-
 
         # dict with loss and preds
         output = {"preds": preds}
@@ -69,8 +80,24 @@ class STAPLERLitModule(pl.LightningModule):
 
         self.train_mlm_acc(labels_mlm, preds_mlm)
         self.train_cls_ap(preds_cls, labels_cls)
-        self.log("train_cls_ap", self.train_cls_ap, on_step=False, on_epoch=True, prog_bar=True, logger=True, batch_size=batch_size)
-        self.log("train_mlm_acc", self.train_mlm_acc, on_step=False, on_epoch=True, prog_bar=True, logger=True, batch_size=batch_size)
+        self.log(
+            "train_cls_ap",
+            self.train_cls_ap,
+            on_step=False,
+            on_epoch=True,
+            prog_bar=True,
+            logger=True,
+            batch_size=batch_size,
+        )
+        self.log(
+            "train_mlm_acc",
+            self.train_mlm_acc,
+            on_step=False,
+            on_epoch=True,
+            prog_bar=True,
+            logger=True,
+            batch_size=batch_size,
+        )
         self.log("train_loss", loss, on_step=True, on_epoch=True, prog_bar=True, logger=True, batch_size=batch_size)
 
         return loss
@@ -85,10 +112,18 @@ class STAPLERLitModule(pl.LightningModule):
         # log
         labels_cls, preds_cls = self.extract_cls_labels_and_preds(batch, preds)
         self.val_cls_ap(preds_cls, labels_cls)
-        self.log("val_cls_ap", self.val_cls_ap, on_step=False, on_epoch=True, prog_bar=True, logger=True, batch_size=batch_size)
+        self.log(
+            "val_cls_ap",
+            self.val_cls_ap,
+            on_step=False,
+            on_epoch=True,
+            prog_bar=True,
+            logger=True,
+            batch_size=batch_size,
+        )
 
-        output_dict['preds_cls'] = preds_cls
-        output_dict['labels_cls'] = labels_cls
+        output_dict["preds_cls"] = preds_cls
+        output_dict["labels_cls"] = labels_cls
         # output_dict['loss'] = loss
         return output_dict
 
@@ -98,7 +133,7 @@ class STAPLERLitModule(pl.LightningModule):
         preds = output_dict["preds"]
         labels_cls, preds_cls = self.extract_cls_labels_and_preds(batch, preds)
 
-        return {'preds_cls': preds_cls.tolist(), 'labels_cls': labels_cls.tolist()}
+        return {"preds_cls": preds_cls.tolist(), "labels_cls": labels_cls.tolist()}
 
     def test_step(self, batch, batch_idx):
         """Test step. Not used during pretraining."""
@@ -109,7 +144,15 @@ class STAPLERLitModule(pl.LightningModule):
         # log
         labels_cls, preds_cls = self.extract_cls_labels_and_preds(batch, preds)
         self.test_cls_ap(preds_cls, labels_cls)
-        self.log("test_cls_ap", self.test_cls_ap, on_step=True, on_epoch=True, prog_bar=False, logger=True, batch_size=batch_size)
+        self.log(
+            "test_cls_ap",
+            self.test_cls_ap,
+            on_step=True,
+            on_epoch=True,
+            prog_bar=False,
+            logger=True,
+            batch_size=batch_size,
+        )
 
         return None
 

@@ -10,7 +10,7 @@ with open("README.md") as readme_file:
 
 install_requires = [
     "numpy==1.24.2",
-    "torch==2.0.1", 
+    "torch==2.0.1",
     "pytorch-lightning==2.0.2",
     "torchvision==0.15.2",
     "pydantic==1.10.8",
@@ -27,7 +27,7 @@ install_requires = [
     "seaborn>=0.11.2",
     "pandas>=1.4.1",
     "scikit-learn>=1.1.2",
-    "x-transformers==1.19.0"
+    "x-transformers==1.19.0",
 ]
 
 
@@ -51,7 +51,7 @@ setup(
     name="stapler",
     test_suite="tests",
     url="https://github.com/NKI-AI/STAPLER",
-    py_modules=["stapler"]
+    py_modules=["stapler"],
     # version=version,
     # zip_safe=False,
 )

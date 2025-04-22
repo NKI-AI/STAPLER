@@ -1,3 +1,17 @@
+# Copyright 2023 Schumacher Lab. All Rights Reserved.
+# Copyright 2023 AI for Oncology Research Group. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 from typing import Any
 
 import pytorch_lightning as pl
@@ -39,7 +53,6 @@ class STAPLERLitModule(pl.LightningModule):
         self.val_mlm_acc = Accuracy(task="multiclass", num_classes=25)
 
     def forward(self, batch: dict[str, torch.Tensor], stage: str, **kwargs):
-
         if self.transforms and stage in self.transforms:
             batch = self.transforms[stage](batch)
 
@@ -71,7 +84,6 @@ class STAPLERLitModule(pl.LightningModule):
         self.log("train_loss", loss, on_step=True, on_epoch=True, prog_bar=True, logger=True, batch_size=batch_size)
 
         return loss
-
 
     def extract_mlm_labels_and_preds(self, batch, preds):
         mlm_preds = preds["mlm_logits"]

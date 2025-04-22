@@ -6,9 +6,18 @@ __pycache__/
 # C extensions
 *.so
 
-# CMake
-CMakeCache.txt
-CMakeFiles
+# Bazel
+bazel-*
+MODULE.bazel.lock
+
+# node
+node_modules
+
+# OS X
+.DS_Store
+
+# Pycharm
+.idea/
 
 # Distribution / packaging
 .Python
@@ -107,15 +116,3 @@ ENV/
 
 # IDE settings
 .vscode/
-.idea/
-
-# Output of tests
-dlup/preprocessors/tests/data/test_output
-
-# OS files
-.DS_Store
-
-
-tools/logs
-config/machine_settings/*
-!config/machine_settings/example.yaml

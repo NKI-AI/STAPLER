@@ -1,0 +1,27 @@
+# =============================================================================
+# Common Settings
+# =============================================================================
+# This makes sure bazel doesn't implicitly create missing __init__.py files.
+build --incompatible_default_to_explicit_init_py
+build --experimental_isolated_extension_usages
+
+# =============================================================================
+# Build Performance
+# =============================================================================
+build --jobs=auto
+build --experimental_remote_merkle_tree_cache
+build --experimental_remote_cache_compression
+build --experimental_remote_cache_async
+build --experimental_guard_against_concurrent_changes
+build --experimental_reuse_sandbox_directories
+
+# =============================================================================
+# Developer Experience
+# =============================================================================
+build --show_progress_rate_limit=0.5
+build --color=yes
+build --terminal_columns=120
+build --show_timestamps
+build --announce_rc  # Show which config files are read
+build --heap_dump_on_oom  # Dump heap on out-of-memory
+test --test_output=all # Show all test output in real time

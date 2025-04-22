@@ -1,3 +1,17 @@
+# Copyright 2023 Schumacher Lab. All Rights Reserved.
+# Copyright 2023 AI for Oncology Research Group. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 from __future__ import annotations
 
 from pathlib import Path
@@ -42,10 +56,13 @@ class TrainDataModule(LightningDataModule):
         self.fold = fold
 
     def setup(self, stage: Optional[str] = None) -> None:
-
         if self.fold is not None:
-            self.val_data_path_fold = self.train_data_path.parent / f"{self.train_data_path.stem.strip('.csv')}_val-fold{self.fold}.csv"
-            self.train_data_path_fold = self.train_data_path.parent / f"{self.train_data_path.stem.strip('.csv')}_train-fold{self.fold}.csv"
+            self.val_data_path_fold = (
+                self.train_data_path.parent / f"{self.train_data_path.stem.strip('.csv')}_val-fold{self.fold}.csv"
+            )
+            self.train_data_path_fold = (
+                self.train_data_path.parent / f"{self.train_data_path.stem.strip('.csv')}_train-fold{self.fold}.csv"
+            )
 
             self.val_dataset = STAPLERDataset(
                 self.val_data_path_fold,
@@ -84,7 +101,7 @@ class TrainDataModule(LightningDataModule):
             pin_memory=self.hparams.pin_memory,
             persistent_workers=self.hparams.num_workers > 0,
             weighted_class_sampling=self.hparams.weighted_class_sampling,
-            weighted_epitope_sampling=self.hparams.weighted_epitope_sampling
+            weighted_epitope_sampling=self.hparams.weighted_epitope_sampling,
         )
         return train_dataloader
 
@@ -96,7 +113,7 @@ class TrainDataModule(LightningDataModule):
             pin_memory=self.hparams.pin_memory,
             persistent_workers=self.hparams.num_workers > 0,
             weighted_class_sampling=False,
-            weighted_epitope_sampling=False
+            weighted_epitope_sampling=False,
         )
         return predict_dataloader
 
@@ -110,7 +127,7 @@ class TrainDataModule(LightningDataModule):
                 pin_memory=self.hparams.pin_memory,
                 persistent_workers=self.hparams.num_workers > 0,
                 weighted_class_sampling=False,
-                weighted_epitope_sampling=False
+                weighted_epitope_sampling=False,
             )
             return val_dataloader
         else:
